@@ -18,7 +18,19 @@ def customer_tickets(conn, customer_id):
     Include only tickets purchased by the given customer_id.
     Order results by film title alphabetically.
     """
-    pass
+    query = """
+    SELCECT films.title, screenings.screen, tickets.price
+    FROM tickets INNER JOIN screenings 
+    ON tickets.screening_id=screening.screening_id
+    WHERE customer_id=?
+    ORDER BY films.title;"""
+
+    cursor = conn.execute(query, (customer_id,))
+
+    for i in cursor:
+        c.add(i)
+
+    return c
 
 
 def screening_sales(conn):
