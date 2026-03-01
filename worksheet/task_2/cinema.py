@@ -19,16 +19,19 @@ def customer_tickets(conn, customer_id):
     Order results by film title alphabetically.
     """
     query = """
-    SELCECT films.title, screenings.screen, tickets.price
-    FROM tickets INNER JOIN screenings 
-    ON tickets.screening_id=screening.screening_id
+    SELECT films.title, screenings.screen, tickets.price
+    FROM tickets 
+    INNER JOIN screenings ON tickets.screening_id=screenings.screening_id
+    INNER JOIN films ON screenings.film_id=films.film_id
     WHERE customer_id=?
     ORDER BY films.title;"""
 
     cursor = conn.execute(query, (customer_id,))
 
+    c = []
+
     for i in cursor:
-        c.add(i)
+        c.append(i)
 
     return c
 
@@ -41,7 +44,7 @@ def screening_sales(conn):
     Include all screenings, even if tickets_sold is 0.
     Order results by tickets_sold descending.
     """
-    pass
+    
 
 
 def top_customers_by_spend(conn, limit):
