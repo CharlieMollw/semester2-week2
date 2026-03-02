@@ -45,7 +45,7 @@ def screening_sales(conn):
     Order results by tickets_sold descending.
     """
     query = """SELECT screenings.screening_id, films.title, COUNT(tickets.ticket_id)
-    FROM tickets RIGHT JOIN screenings 
+    FROM screenings LEFT JOIN tickets 
     ON tickets.screening_id=screenings.screening_id
     INNER JOIN films
     ON screenings.film_id=films.film_id
