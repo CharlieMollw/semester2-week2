@@ -44,13 +44,13 @@ def screening_sales(conn):
     Include all screenings, even if tickets_sold is 0.
     Order results by tickets_sold descending.
     """
-    query = """SELECT screenings.screening_id, films.title, COUNT(*)
-    FROM tickets INNER JOIN screenings 
+    query = """SELECT screenings.screening_id, films.title, COUNT(tickets.ticket_id)
+    FROM tickets RIGHT JOIN screenings 
     ON tickets.screening_id=screenings.screening_id
     INNER JOIN films
     ON screenings.film_id=films.film_id
     GROUP BY screenings.screening_id
-    ORDER BY COUNT(*) desc"""
+    ORDER BY COUNT(tickets.ticket_id) desc"""
 
     cursor = conn.execute(query)
 
