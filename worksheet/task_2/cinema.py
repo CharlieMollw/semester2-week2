@@ -50,7 +50,7 @@ def screening_sales(conn):
     INNER JOIN films
     ON screenings.film_id=films.film_id
     GROUP BY screenings.screening_id
-    ORDER BY COUNT(tickets.ticket_id) desc"""
+    ORDER BY COUNT(tickets.ticket_id) desc;"""
 
     cursor = conn.execute(query)
 
