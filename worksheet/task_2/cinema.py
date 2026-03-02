@@ -44,7 +44,22 @@ def screening_sales(conn):
     Include all screenings, even if tickets_sold is 0.
     Order results by tickets_sold descending.
     """
-    
+    query = """SELECT screenings.screening_id, films.title, COUNT(*)
+    FROM tickets RIGHT JOIN screenings 
+    ON tickets.screening_id=screenings.screening_id
+    INNER JOIN films
+    ON screenings.film_id=films.film_id
+    GROUP BY screenings.screening_id
+    ORDER BY COUNT(*) desc"""
+
+    cursor = conn.execute(query)
+
+    c = []
+
+    for i in cursor:
+        c.append(i)
+
+    return c
 
 
 def top_customers_by_spend(conn, limit):
@@ -57,4 +72,18 @@ def top_customers_by_spend(conn, limit):
     Order by total_spent descending.
     Limit the number of rows returned to `limit`.
     """
-    pass
+    query = """SELECT customers.customer_name, SUM(tickets.price)
+    FROM tickets INNER JOIN customers
+    ON tickets.customer_id=customers.customer_id
+    GROUP BY customers.customer_name
+    ORDER BY SUM(tickets.price) desc
+    LIMIT ?"""
+
+    cursor = conn.execute(query, (limit,))
+
+    c = []
+
+    for i in cursor:
+        c.append(i)
+
+    return c
